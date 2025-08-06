@@ -1,0 +1,6 @@
+- `uv sync`
+- `sudo su - postgres`
+- `createdb sevensix_dev`
+- `psql -d sevensix_dev`
+- run queries in `sql.txt` inside sevensix_dev in postgres
+- setup `.env`
