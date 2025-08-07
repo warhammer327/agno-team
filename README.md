@@ -1,3 +1,4 @@
+- `uv venv`
 - `uv sync`
 - `sudo su - postgres`
 - `createdb sevensix_dev`
