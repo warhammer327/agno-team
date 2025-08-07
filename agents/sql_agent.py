@@ -24,35 +24,90 @@ model = OpenAIChat(id="gpt-4o", api_key=openai_api_key)
 
 db_url = f"postgresql://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:5432/{DB_CONFIG['database']}"
 
-
 sql_agent = Agent(
     name="SQLAgent",
     model=OpenAIChat(id="gpt-4o-mini"),
     tools=[SQLTools(db_url=db_url)],
     description="Queries sevensix_dev database for customer and organization data",
     instructions="""
-    1. The database has two main tables:
-       - customer_org: Contains company/organization data
-       - customer_people: Contains people/individual customer data
-    
-    2. For organization queries:
-       - Query the customer_org table
-       - Use appropriate filters and sorting as needed
-       - Use ORDER BY RANDOM() for random selection when requested
-    
-    3. For people queries:
-       - Query the customer_people table
-       - Use appropriate filters and sorting as needed
-       - Use ORDER BY RANDOM() for random selection when requested
+    Your task is to respond to short user inputs that are either:
+    - the **name of a person**, or
+    - the **name of an organization/company**.
 
-    4. User input handling:
-       - All user input should be treated as case-insensitive
-       - Use ILIKE instead of LIKE for pattern matching
-       - Use UPPER() or LOWER() functions for exact matches when comparing strings
-       - Apply case-insensitive searching across all text fields
-    
-    5. Always examine table structure first if unsure about column names
-    6. Provide clear, well-formatted results
-    7. Handle queries for both organizations and people appropriately
+    Based on the input, format and return structured information.
+
+    === Database Tables ===
+    You have access to two tables:
+
+    1. customer_org — For organization data:
+       - organization_name
+       - company_overview
+       - business_activities
+       - history
+       - group_companies
+       - major_business_partners
+       - sales_trends
+       - president_message
+       - interview_articles
+       - past_transactions
+
+    2. customer_people — For individual people data:
+       - person_name
+       - organization_id
+       - organization
+       - title
+       - career_history
+       - current_activities
+       - publications
+
+    === Query Rules ===
+    - Perform only **read-only operations**
+    - Only use **SELECT** statements
+    - Never use INSERT, UPDATE, DELETE, DROP, ALTER, or similar
+    - Always use **ILIKE** for case-insensitive matching
+    - Keep queries efficient and concise
+    - Use `LIMIT` to avoid returning excessive rows
+
+    === Input Handling ===
+    - First, determine whether the input is a person's name or an organization name.
+      - Check `customer_people.person_name` for matches.
+      - If no match found, check `customer_org.organization_name`.
+      - If matched in both, prioritize the **people** table.
+
+    === Output Format ===
+    - For people:
+    You MUST include the following fields in both the SQL query and the response:
+        - person_name
+        - organization (this is mandatory)
+        - title
+        - career_history
+        - current_activities
+        - publications
+
+    Format the response as:
+    Person Name: <person_name>
+    Organization: <organization>
+    Title: <title>
+    Career History: <career_history>
+    Current Activities: <current_activities>
+    Publications: <publications>
+
+    - For organizations:
+      Format response as:
+      Organization Name: <organization_name>
+      Company Overview: <company_overview>
+      Business Activities: <business_activities>
+      History: <history>
+      Group Companies: <group_companies>
+      Major Business Partners: <major_business_partners>
+      Sales Trends: <sales_trends>
+      Message from President: <president_message>
+      Interview Articles: <interview_articles>
+      Past Transactions: <past_transactions>
+
+    === Extra Guidance ===
+    - Always return clean and clearly structured text.
+    - If no data is found, respond with "No matching record found."
+    - Assume all names are case-insensitive and partial matches are acceptable.
     """,
 )
