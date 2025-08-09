@@ -12,6 +12,7 @@ dependencies = [
     "packaging>=25.0",
     "psycopg2-binary>=2.9.10",
     "python-dotenv>=1.1.1",
+    "scrapy>=2.13.3",
     "sqlalchemy>=2.0.42",
     "tavily-python>=0.7.10",
 ]
