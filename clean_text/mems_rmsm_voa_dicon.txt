@@ -1,0 +1,27 @@
+URL: https://www.sevensix.co.jp/products/mems_rmsm_voa_dicon/
+Scraped: 2025-08-10 13:38:17
+
+Title: MEMS型 ラックマウント シングルモードVOA 取扱製品 セブンシックス株式会社 sevensix -think next-
+高い品質と信頼性
+優れた光学性能
+ライフタイム 10億サイクル
+実績のあるDiCon MEMSミラー技術
+簡単に使えるラックマウントハウジング
+イーサネットまたはRS-232インターフェース
+試験・計測
+研究・開発
+光源の精密なパワー調整
+OSNR測定
+仕様詳細
+対応波長(nm)
+1290 1610
+VOA数
+耐久光入力(mW)
+200 500
+減衰量(dB)
+-40
+ファイバタイプ
+SMF PMF
+応答速度(ms)
+光学特性
+電気特性

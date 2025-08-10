@@ -1,0 +1,44 @@
+URL: https://www.sevensix.co.jp/products/quantum_switch_polatis/
+Scraped: 2025-08-10 13:35:12
+
+Title: 量子用超低損失 マトリックス光スイッチ 取扱製品 セブンシックス株式会社 sevensix -think next-
+1260 1675nm ノンブロッキング16 16光スイッチ
+量子用途に最適な超低損失(typ 0.35 dB)QuPC(LC APC)光コネクタ採用
+スイッチ内の光路の位相整合 0.5 ns以内
+ダークファイバー接続のスイッチングおよび保持が可能
+双方向(Bidirectional)の光接続
+API対応(NETCONF, RESTFCONF, TL2他)
+量子通信や量子鍵配送 QKD ネットワーク
+パラメータ
+Switch Size (Ports)
+16 input x 16 output
+Typical Insertion Loss
+0.35 dB
+Maximum Insertion Loss
+0.70 dB
+Loss Repeatability
+-0.1dB
+Connection Stability
+-0.1dB
+Dark Fiber Switching
+Yes
+Bi-Direction Optics
+Yes
+Data latency through a switch connection
+25 - 0.5 ns
+Maximum Switching Time
+25ms
+Polarization Dependent Loss (PDL)
+0.1dB (C L Bands)
+Crosstalk
+-50dB
+Operating Wavelength Range
+1260-1675nm
+Wavelength Dependent Loss (WDL)
+0.3dB (C L Band)
+Return Loss (with APC connectors)
+50dB
+Optical Input Power Range
+Dark to 24 dBm
+Switch Lifetime
+10 9 Cycles

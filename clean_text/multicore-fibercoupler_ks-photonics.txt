@@ -1,0 +1,33 @@
+URL: https://www.sevensix.co.jp/products/multicore-fibercoupler_ks-photonics/
+Scraped: 2025-08-10 13:35:08
+
+Title: マルチコアファイバカプラ 取扱製品 セブンシックス株式会社 sevensix -think next-
+各コアへ対する直接結合
+FIFO-less結合
+低損失
+オールファイバ構造
+コンパクトサイズ
+マルチコアファイバ増幅器
+MCF分岐比可変 固定カプラ
+MCF TAPカプラ
+MCF WDMカプラ(ビームコンバイナ)
+MCF Fan-In Fan-Out
+仕様詳細
+マルチコア WDMカプラ 仕様例
+Specifications
+Port 1
+Port
+Wavelength
+980 nm
+1550 nm
+Insertion loss
+0.04 dB
+0.4 dB
+99.1
+91.2
+Isolation
+15 dB
+12 dB
+仕様値は使用するマルチコア光ファイバ性能に依存
+関連動画
+6G 第6世代通信向けキーデバイス Vol.89

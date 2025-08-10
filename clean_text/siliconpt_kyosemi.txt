@@ -1,0 +1,54 @@
+URL: https://www.sevensix.co.jp/products/siliconpt_kyosemi/
+Scraped: 2025-08-10 13:37:49
+
+Title: シリコンフォトトランジスタ 取扱製品 セブンシックス株式会社 sevensix -think next-
+NPN型フォトトランジスタ
+透明エポキシモールド セラミックパッケージ 気密パッケージ
+低暗電流
+可視光カットタイプ
+光スイッチ
+光学式エンコーダ
+光アイソレータ
+カメラストロボ
+赤外センサ
+自動制御機器
+仕様詳細
+受光サイズ
+(Typ. )
+検出波長
+Min. nm Max. nm
+光電流
+Typ. mA 条件
+電流増幅率
+Typ. 条件
+半値角(Typ.)
+パッケージ
+KPT081M31
+0.64 0.64
+400 1000
+VCE 5V
+100lx( 2856K)
+600 VCE 5V IC 2mA
+MOLD
+KPT801C2
+0.64 0.64
+400 1100
+VCE 5V
+100lx( 2856K)
+400 VCE 5V IC 2mA
+120
+STEM
+KPT811H
+0.64 0.64
+400 1000
+VCE 5V
+100lx( 2856K)
+600 VCE 5V IC 2mA
+TO-CAN
+KPT801HB2
+0.64 0.64
+700 1100
+VCE 5V
+100lx( 2856K)
+400 VCE 5V IC 2mA
+TO-CAN

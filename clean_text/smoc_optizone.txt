@@ -1,0 +1,18 @@
+URL: https://www.sevensix.co.jp/products/smoc_optizone/
+Scraped: 2025-08-10 13:38:30
+
+Title: シングルモード光コリメータ 取扱製品 セブンシックス株式会社 sevensix -think next-
+低挿入損失
+高リターンロス
+ファイバーセンサ
+研究用途
+仕様詳細
+850nm 980nm 1064nm 1310nm 1480nm 1550nm その他も対応可
+入力パワー
+300mW 500mW 3W 5W 10W
+コネクタタイプ
+FC UPC FC APC SC UPC SC APC None その他も対応可
+ファイバ被膜
+250umベアファイバ 900umルーズチューブ 900umタイトバッファファイバ 3mmルーズケーブル その他も対応可
+ファイバ長
+1.5m 1.75m その他も対応可

@@ -1,0 +1,8 @@
+SCRAPING ERROR REPORT
+==================================================
+
+ERROR PAGES (2):
+------------------------------
+https://www.sevensix.co.jp/products/fibersleeve_fujikura/ - Pattern: 404
+https://www.sevensix.co.jp/products/freespace_smlaser_innolume/ - Pattern: 404
+

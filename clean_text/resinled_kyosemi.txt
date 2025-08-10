@@ -1,0 +1,86 @@
+URL: https://www.sevensix.co.jp/products/resinled_kyosemi/
+Scraped: 2025-08-10 13:29:08
+
+Title: 樹脂モールド可視光LED 取扱製品 セブンシックス株式会社 sevensix -think next-
+透明樹脂モールド
+直接変調可
+光スイッチ
+光学機器
+自動制御機器
+仕様詳細
+発光波長
+Typ. nm 条件 IF mA
+光出力
+Typ. mW 条件 IF mA
+半値角
+(Typ. 2θdeg )
+パッケージ
+660 20
+4 20
+MOLD
+670 20
+3.3 20
+MOLD
+660 20
+3.7 20
+MOLD
+660 20
+MOLD
+660 20
+MOLD
+660 20
+3.5 20
+MOLD
+660 20
+MOLD
+660 20
+MOLD
+660 20
+3.5 20
+MOLD
+635 20
+6 20
+116
+MOLD
+635 20
+9 20
+MOLD
+635 20
+9.4 20
+MOLD
+635 20
+8.5 20
+MOLD
+625 20
+9.5 20
+MOLD
+625 20
+9.3 20
+MOLD
+625 20
+8.5 20
+MOLD
+610 20
+7 20
+MOLD
+610 20
+7.2 20
+MOLD
+610 20
+6.5 20
+MOLD
+590 20
+3.4 20
+MOLD
+590 20
+3.4 20
+MOLD
+590 20
+3.2 20
+MOLD
+525 20
+MOLD
+465 20
+18 20
+115
+MOLD

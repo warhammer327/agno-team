@@ -1,0 +1,22 @@
+URL: https://www.sevensix.co.jp/products/smfc_optizone/
+Scraped: 2025-08-10 13:38:28
+
+Title: シングルモードフューズドカプラ 取扱製品 セブンシックス株式会社 sevensix -think next-
+広帯域
+低挿入損失
+研究開発
+光増幅器
+CATV Network
+仕様詳細
+980nm 1030nm 1060nm 1310nm 1480nm 1550nm 1940nm 2000nm その他も対応可
+ポート数
+1 2 2 2
+カップリング比率
+0.1 99.9 1 99 2 98 3 97 5 95 10 90 20 80 30 70
+40 60 50 50 その他も対応可
+コネクタタイプ
+FC UPC FC APC SC UPC SC APC LC UPC LC APC MU UPC None その他も対応可
+ファイバ被膜
+250umベアファイバ 900umルーズチューブ その他も対応可
+ファイバ長
+標準1m その他も対応可

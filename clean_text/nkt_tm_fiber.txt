@@ -1,0 +1,35 @@
+URL: https://www.sevensix.co.jp/products/nkt_tm_fiber/
+Scraped: 2025-08-10 13:30:35
+
+Title: Tm添加ダブルクラッドフォトニック結晶ファイバ 取扱製品 セブンシックス株式会社 sevensix -think next-
+最大38 umのモードフィールド径
+高ピークパワー 高パルスエネルギー対応
+ファイバレーザ増幅器用
+仕様詳細
+Signal core
+Mode properties
+Single-mode
+Mode-field diameter, 1 e2 1930 nm µm
+38.0 2.5
+Multi-mode pump core
+Numerical aperture 800 nm
+0.5
+Pump absorption 1180 nm dB m
+1.35 0.30
+Pump absorption, typical 793 nm dB m
+5.5
+Polarization parameters
+Birefringence Δn 2 µm
+1 x 10-4
+Physical properties
+Signal core diameter µm
+Pump cladding diameter µm
+250 5
+Outer cladding diameter µm
+560 30
+Coating diameter µm
+640 40
+Outer and pump cladding material
+Pure silica
+Coating material, single-layer
+High-temperature acrylate

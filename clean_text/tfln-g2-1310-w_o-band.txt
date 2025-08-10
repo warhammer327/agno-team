@@ -1,0 +1,17 @@
+URL: https://www.sevensix.co.jp/products/tfln-g2-1310-w_o-band/
+Scraped: 2025-08-10 13:35:35
+
+Title: 薄膜LN 110GHz光強度変調器 取扱製品 セブンシックス株式会社 sevensix -think next-
+125 GHz bandwidth
+Low Vπ model and Regular Vπ model support
+High extinction ratio
+C L-band, O-band support
+Compact footprint, stable DC biasing
+1.0mm RF Connector(W), PM fibers with FC APC connectors
+Cryogenic-compatible version available
+448 Gbps lane testing
+240 Gbaud testing
+Reference transmitters for test and measurement
+Radio-over-fiber and satellite links
+解説・関連動画
+100GHz Bandwidth 薄膜LN集積回路の性能限界を押し上げる Vol.102

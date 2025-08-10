@@ -1,0 +1,84 @@
+URL: https://www.sevensix.co.jp/products/resininfrared_kyosemi/
+Scraped: 2025-08-10 13:34:22
+
+Title: 樹脂モールド赤外LED 取扱製品 セブンシックス株式会社 sevensix -think next-
+透明樹脂モールド
+高出力: 22mW
+高速応答: 25ns 立上り時間
+直接変調可
+無線デジタル伝送
+センサ
+エンコーダ
+光学機器
+自動制御機器
+仕様詳細
+発光波長
+Typ. nm 条件 IF mA
+光出力
+Typ. mW 条件 IF mA
+半値角
+(Typ. 2θdeg )
+パッケージ
+865 50
+22 50
+MOLD
+1550 50
+1.6 50
+MOLD
+1300 50
+2.2 50
+MOLD
+1450 50
+2.2 50
+MOLD
+940 50
+11 50
+MOLD
+940 50
+21 50
+MOLD
+940 50
+10 50
+MOLD
+940 50
+10 50
+MOLD
+940 50
+11 50
+MOLD
+870 50
+21 50
+MOLD
+865 50
+22 50
+MOLD
+865 50
+22 50
+MOLD
+865 50
+22 50
+MOLD
+865 50
+25 50
+MOLD
+865 50
+22 50
+MOLD
+865 50
+22 50
+MOLD
+850 50
+22 50
+MOLD
+850 50
+22 50
+MOLD
+850 50
+22 50
+MOLD
+850 50
+22 50
+MOLD
+850 50
+22 50
+MOLD

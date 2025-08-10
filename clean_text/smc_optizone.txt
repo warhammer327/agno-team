@@ -1,0 +1,24 @@
+URL: https://www.sevensix.co.jp/products/smc_optizone/
+Scraped: 2025-08-10 13:39:58
+
+Title: シングルモードサーキュレータ 取扱製品 セブンシックス株式会社 sevensix -think next-
+低挿入損失
+高アイソレーション
+光増幅器
+FBGアプリケーション
+ファイバーセンサ
+仕様詳細
+850nm 1064nm 1310nm 1550nm 1610nm その他も対応可
+ポート数
+1 2 2 2
+入力パワー
+300mW 500mW その他も対応可
+コネクタタイプ
+FC UPC FC APC SC UPC SC APC None その他も対応可
+ファイバ被膜
+250umベアファイバ 250umパンダファイバ 400umベアファイバ 900umルーズチューブ その他も対応可
+ファイバ長
+標準0.8m 1m その他も対応可
+ッケージタイプ
+標準タイプ
+Type C139

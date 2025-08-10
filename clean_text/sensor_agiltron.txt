@@ -1,0 +1,44 @@
+URL: https://www.sevensix.co.jp/products/sensor_agiltron/
+Scraped: 2025-08-10 13:37:24
+
+Title: 光電界センサー 取扱製品 セブンシックス株式会社 sevensix -think next-
+金属部品不使用
+光ファイバー読み出し
+高い衝撃 振動耐性
+高感度
+広帯域
+高ダメージ閾値
+HPMのテスト 評価
+HRI EMPシステム
+PAAレーダ
+アクティブディナイアルシステム
+仕様詳細
+パラメータ
+Typical
+Max
+Unit
+周波数帯域 (Ultra High)
+GHz
+(high)
+GHz
+(Low)
+250
+MHz
+感度 1 (Ultra High)
+mV m-Hz
+1 2
+(Ultra-High frequency)
+mV m-Hz
+1 2
+(Low frequency)
+mV m-Hz
+1 2
+最大検出Eフィールド 2
+200
+kV m
+ダメージEフィールド
+MV m
+パッケージ寸法
+デザイン参照
+1 1550nmレーザー 20mW 100MHzで測定した結果です
+2 増加する可能性がありますので お問い合わせください

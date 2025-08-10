@@ -1,0 +1,17 @@
+URL: https://www.sevensix.co.jp/products/opal-sd_exfo/
+Scraped: 2025-08-10 13:29:33
+
+Title: OPAL-SD フォトニック集積回路 (PIC) 向けシングルダイ自動プローブステーション 取扱製品 セブンシックス株式会社 sevensix -think next-
+シングルダイレベルのPICテストに最適
+高精度な自動アライメント機能により 迅速かつ安定した測定を実現
+透過率 反射率 偏波依存損失 PDL 波長分散など多様な測定に対応
+コンパクト設計で研究開発環境にも適用可能
+EXFOの測定機器とシームレスに統合可能
+EXFO社の
+との組み合わせで最適な測定環境を実現
+光通信向けフォトニック集積回路 PIC の評価
+シリコンフォトニクスデバイスの特性評価
+研究開発および小規模生産ラインでのテスト
+使用詳細
+関連動画
+Introducing the OPAL-MD, probe station for multi-die testing
