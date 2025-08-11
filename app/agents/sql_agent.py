@@ -1,40 +1,19 @@
-import os
 from agno.agent import Agent
 from agno.tools.sql import SQLTools
 from agno.models.openai import OpenAIChat
+from config import config
 from dotenv import load_dotenv
 
 load_dotenv()
 
-DB_CONFIG = {
-    "host": "localhost",
-    "database": "sevensix_dev",
-    "user": "postgres",
-    "password": "2244",
-}
 
-ETL_DB_CONFIG = {
-    "host": "10.10.10.80",
-    "database": "sevensix_dev_1",
-    "user": "postgres",
-    "password": "2244",
-}
+model = OpenAIChat(id="gpt-4o-mini", api_key=config.OPENAI_API_KEY, temperature=0.1)
 
-openai_api_key = os.getenv("OPENAI_API_KEY")
-
-if not openai_api_key:
-    raise ValueError(
-        "OPENAI_API_KEY not found in environment variables. Please check your .env file."
-    )
-
-model = OpenAIChat(id="gpt-4o", api_key=openai_api_key)
-
-db_url = f"postgresql://{ETL_DB_CONFIG['user']}:{ETL_DB_CONFIG['password']}@{ETL_DB_CONFIG['host']}:5432/{ETL_DB_CONFIG['database']}"
 
 sql_agent = Agent(
     name="SQLAgent",
-    model=OpenAIChat(id="gpt-4o-mini"),
-    tools=[SQLTools(db_url=db_url)],
+    model=model,
+    tools=[SQLTools(db_url=config.database_url)],
     description="Queries sevensix_dev database for customer and organization data",
     instructions="""
     Your task is to respond to short user inputs that are either:

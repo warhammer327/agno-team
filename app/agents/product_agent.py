@@ -4,20 +4,10 @@ from agno.models.openai import OpenAIChat
 from agno.knowledge.text import TextKnowledgeBase
 from agno.vectordb.search import SearchType
 from agno.vectordb.weaviate import Distance, VectorIndex, Weaviate
+from config import config
 
-from dotenv import load_dotenv
 
-load_dotenv()
-
-openai_api_key = os.getenv("OPENAI_API_KEY")
-tavily_api_key = os.getenv("TAVILY_API_KEY")
-
-if not openai_api_key:
-    raise ValueError(
-        "OPENAI_API_KEY not found in environment variables. Please check your .env file."
-    )
-
-model = OpenAIChat(id="gpt-4o", api_key=openai_api_key)
+model = OpenAIChat(id="gpt-4o", api_key=config.OPENAI_API_KEY)
 
 vector_db = Weaviate(
     collection="ProductDocuments",

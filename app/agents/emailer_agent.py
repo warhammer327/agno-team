@@ -1,37 +1,18 @@
 import os
-import time
 from agno.agent import Agent
 from agno.tools.sql import SQLTools
 from agno.models.openai import OpenAIChat
 from agno.knowledge.text import TextKnowledgeBase
 from agno.vectordb.search import SearchType
 from agno.vectordb.weaviate import Distance, VectorIndex, Weaviate
-from dotenv import load_dotenv
-
-load_dotenv()
-
-DB_CONFIG = {
-    "host": "localhost",
-    "database": "sevensix_dev",
-    "user": "postgres",
-    "password": "2244",
-}
-
-ETL_DB_CONFIG = {
-    "host": "10.10.10.80",
-    "database": "sevensix_dev_1",
-    "user": "postgres",
-    "password": "2244",
-}
+from config import config
 
 print("Loading knowledge base...")
 
-openai_api_key = os.getenv("OPENAI_API_KEY")
 
 # Use cheaper model with lower rate limits
-model = OpenAIChat(id="gpt-4o-mini", api_key=openai_api_key)
+model = OpenAIChat(id="gpt-4o-mini", api_key=config.OPENAI_API_KEY)
 
-db_url = f"postgresql://{ETL_DB_CONFIG['user']}:{ETL_DB_CONFIG['password']}@{ETL_DB_CONFIG['host']}:5432/{ETL_DB_CONFIG['database']}"
 
 vector_db = Weaviate(
     collection="ProductDocuments",
@@ -47,7 +28,7 @@ emailer_agent = Agent(
     name="ProductEmailerAgent",
     model=model,
     knowledge=knowledge_base,
-    tools=[SQLTools(db_url=db_url)],
+    tools=[SQLTools(db_url=config.database_url)],
     stream_intermediate_steps=True,
     description="Fetches product information from vector database then drafts a promotional email.",
     # SYSTEM MESSAGE → sets agent identity, tone, and global behavior
