@@ -1,8 +1,8 @@
 import os
 from agno.team.team import Team
-
-# from agents.websearch_agent import web_search
 from agents.sql_agent import sql_agent
+from agents.product_agent import product_agent
+from agents.emailer_agent import emailer_agent
 from agents.sql_agent import db_url
 from agno.storage.postgres import PostgresStorage
 from agno.memory.v2.db.postgres import PostgresMemoryDb
@@ -41,67 +41,48 @@ def main():
         add_history_to_messages=True,
         num_history_runs=5,
         read_team_history=True,
-        members=[sql_agent],
+        members=[sql_agent, product_agent, emailer_agent],
         model=OpenAIChat(id="gpt-4o", api_key=openai_api_key),  # team leader model
         tools=[ReasoningTools(add_instructions=True)],
         instructions=[
             """
-            CRITICAL RESTRICTIONS - YOU MUST FOLLOW THESE RULES:
+            You are the OrchestratorAgent coordinating three specialized agents. Your role is to understand user requests and delegate to the appropriate agent(s) based on the task.
 
-    1. You can ONLY use the SQLAgent - NO OTHER AGENTS OR TOOLS
-    2. You are FORBIDDEN from using your built-in knowledge, training data, or pre-existing information
-    3. You CANNOT answer ANY question using your internal knowledge - even if you "know" the answer
-    4. You MUST treat yourself as having NO knowledge about anything - you are just a coordinator
-    5. EVERY query must go to SQLAgent to search the actual database tables
+            AVAILABLE AGENTS:
+            1. SQLAgent - For researching organization and person information from database
+            2. ProductManagerAgent - For product search and recommendations  
+            3. EmailAgent - For drafting emails
 
-    DATABASE SCHEMA AWARENESS:
-    The database contains two tables:
-    - `person` table: Contains person_name, title, career_history, current_activities, publications, organization_id
-    - `organization` table: Contains organization_name, company_overview, business_activities, history, group_companies, major_business_partners, sales_trends, president_message, interview_articles, past_transactions
+            DELEGATION RULES:
+            
+            🔍 For Organization/Person Information:
+            - When users ask about companies, organizations, or people
+            - Use SQLAgent to search database for: company overview, business activities, history, group companies, major business partners, sales trends, president messages, interview articles, past transactions
+            - For persons: research organization, title, career history, current activities, publications
 
-    ABSOLUTE PROCESS - NO EXCEPTIONS:
-    1. Receive user input (which should be either a person's name or organization name)
-    2. Determine the most likely input type based on naming patterns:
-       - Person names: Usually "FirstName LastName" format (e.g., "John Smith", "Mary Johnson")
-       - Organization names: Usually contain business indicators like "Inc", "Ltd", "Corp", "Technologies", "Company", "Group" OR are single-word company names
-    3. Send the query to SQLAgent with clear instruction about which table to search first
-    4. Wait for SQLAgent response with actual database results
-    5. If SQLAgent succeeds: Present ONLY the database results exactly as returned
-    6. If SQLAgent fails or finds no data: Respond EXACTLY with "The requested information is not found in the database"
+            🛍️ For Product Information:
+            - When users ask about products, solutions, or need product recommendations
+            - Use ProductManagerAgent to search for matching products
+            - If multiple products match, ask follow-up questions to narrow search
 
-    INPUT TYPE RECOGNITION (Pattern-based only):
-    - If input matches "FirstName LastName" pattern → Person search in `person` table
-    - If input contains business suffixes (Inc, Ltd, Corp, etc.) → Organization search in `organization` table  
-    - If input is a single word that could be a company name → Try organization table first, then person table
-    - If ambiguous → Check `person` table first, then `organization` table as fallback
-    - NEVER use your knowledge to determine what the input refers to
+            ✉️ For Email Drafting:
+            - When users request email drafts, proposals, or outreach messages
+            - Use EmailAgent to draft subject and body
+            - Include organization/person challenges and product benefits
+            - Requires: [product name] and [organization name/person name]
 
-    QUERY INSTRUCTIONS FOR SQLAgent:
-    - For person searches: "Search the person table for anyone with person_name containing '[input]'"
-    - For organization searches: "Search the organization table for any organization with organization_name containing '[input]'"
-    - Always specify to use ILIKE with wildcards for partial matching
-    - Request all relevant fields for complete information
+            WORKFLOW EXAMPLES:
+            1. "Tell me about Company X" → Use SQLAgent
+            2. "What products do you have for data analysis?" → Use ProductManagerAgent  
+            3. "Draft an email to Company Y about Product Z" → Use EmailAgent
+            4. "Find info about John Smith, then recommend products, then draft email" → Use SQLAgent → ProductManagerAgent → EmailAgent
 
-    PROHIBITED ACTIONS:
-    - Do NOT answer questions using your training data or built-in knowledge
-    - Do NOT provide information you "know" about people or organizations
-    - Do NOT supplement database results with external knowledge
-    - Do NOT make educated guesses about who someone is or what company does
-    - Do NOT use web search, external APIs, or any other data sources
-    - Do NOT assume relationships between people and organizations beyond what's in the database
+            MEMORY USAGE:
+            - Remember previous searches and context within the conversation
+            - Build upon information gathered from previous agent interactions
+            - Use conversation history to provide better recommendations
 
-    RESPONSE FORMATTING:
-    - Present SQLAgent results exactly as received
-    - Do not add, modify, or interpret the database results
-    - If multiple records found, show all of them
-    - If no results: "The requested information is not found in the database"
-    - Never explain what you would have known from training data
-
-    MINDSET: You are a pure database query coordinator with ZERO external knowledge. Your only function is:
-    1. Pattern recognition for input type (person vs organization name format)
-    2. Routing queries to SQLAgent with proper table specification
-    3. Returning database results without modification
-
+            Always explain which agent you're using and why.
             """
         ],
         markdown=True,
@@ -109,23 +90,13 @@ def main():
         enable_agentic_context=True,
         add_datetime_to_instructions=True,
         success_criteria="""
-        SUCCESS CRITERIA - The task is successful ONLY if:
-
-            1. ZERO use of built-in LLM knowledge or training data
-            2. The user query was sent to SQLAgent WITHOUT any pre-analysis using internal knowledge
-            3. SQLAgent executed SQL queries against the sevensix_dev database
-            4. Response contains ONLY database results or the exact message "The requested information is not found in the database"
-            5. NO external sources, web searches, or internal LLM knowledge was used
-            6. NO additional context or information was added beyond what SQLAgent returned
-
-            FAILURE CONDITIONS - The task FAILS if:
-            - Any information from LLM training data was used
-            - Questions were answered using built-in knowledge instead of database queries
-            - Any supplemental information was added to database results
-            - Any web search was attempted
-            - Any external data source was accessed
-            - Multiple agents were used when only SQLAgent should be used
-            - The orchestrator "thought" about the answer instead of immediately routing to SQLAgent
+            SUCCESS CRITERIA - The task is successful when:
+                1. User queries are correctly routed to appropriate agents
+                2. SQLAgent is used for organization/person information 
+                3. ProductManagerAgent is used for product searches
+                4. EmailAgent is used for email drafting
+                5. Memory is utilized to maintain context across interactions
+                6. Multiple agents are coordinated when complex tasks require it
         """,
     )
 

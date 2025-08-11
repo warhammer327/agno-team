@@ -76,8 +76,3 @@ emailer_agent = Agent(
                 • Maintains a concise, persuasive, and friendly tone.
     """,
 )
-
-
-emailer_agent.print_response(
-    "Find information about the product superKfianium, mention it's featrues and create a promotional email for 福沢 博志."
-)
