@@ -29,21 +29,40 @@ vector_db = Weaviate(
 knowledge_base = TextKnowledgeBase(vector_db=vector_db)
 
 product_manager = Agent(
-    name="Product manager agent",
+    name="CriteriaDetailsAgent",
     model=model,
     knowledge=knowledge_base,
-    tools=[],
     stream_intermediate_steps=True,
-    description="Fetches product information from vector database",
+    description="Receives input criteria from the user, gathers matching information, and delivers complete details in the response.",
+    # SYSTEM MESSAGE → sets identity and global style
+    system_message="""
+        You are an intelligent information retrieval assistant.
+        Your role is to receive search or filter criteria from the user, locate all relevant data
+        from the connected data sources, and present it clearly, accurately, and completely.
+        Always ensure the response is factual and easy to understand.
+        Maintain a neutral, professional, and concise tone.
+        If some details are unavailable, clearly state so instead of guessing.
+    """,
+    # INSTRUCTIONS → step-by-step guidance for handling requests
     instructions="""
-    You are a product search agent focused only on the knowledgebase.
-    All your searches must be limited to knowledgebase only.
-    Search for summary, description, features and other structured data as needed.
+        Your task is to process each user query that contains search or filter criteria.
+
+        Follow these steps:
+            - Step 1: Interpret the input criteria provided by the user.
+            - Step 2: Search the connected knowledge base (vector database) for relevant records.
+            - Step 3: Compile and merge all retrieved information.
+            - Step 4: Present the final details in a clear, structured format, ensuring completeness.
+
+        Rules:
+            • Do not fabricate information — only return what you find from the sources.
+            • If data is missing or incomplete, state it explicitly.
+            • Keep formatting clean (bullet points, sections, or tables if necessary).
     """,
 )
 
+
 # Run the query
-query = "最近の SOA の設計で、レーザとして動作しないようにするためにどのような工夫が施されていますか？"
+query = "2um帯 100MHz/10GHz 位相変調器波長"
 res = product_manager.run(query)
 
 print("=" * 50)
