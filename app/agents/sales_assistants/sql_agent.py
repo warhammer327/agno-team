@@ -1,6 +1,7 @@
 from agno.agent import Agent
 from agno.tools.sql import SQLTools
 from agno.models.openai import OpenAIChat
+from schemas.sales_assistants.sql_agent_response import SQLAgentResponse
 from config import config
 from dotenv import load_dotenv
 
@@ -14,6 +15,7 @@ sql_agent = Agent(
     name="SQLAgent",
     model=model,
     tools=[SQLTools(db_url=config.database_url)],
+    response_model=SQLAgentResponse,
     description="Queries sevensix_dev database for customer and organization data",
     instructions="""
     Your task is to respond to short user inputs that are either:

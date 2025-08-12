@@ -1,8 +1,7 @@
-import os
 from agno.team.team import Team
-from agents.sql_agent import sql_agent
-from agents.product_agent import product_agent
-from agents.emailer_agent import emailer_agent
+from agents.sales_assistants.sql_agent import sql_agent
+from agents.sales_assistants.emailer_agent import emailer_agent
+from agents.sales_assistants.product_agent import product_agent
 from agno.storage.postgres import PostgresStorage
 from agno.memory.v2.db.postgres import PostgresMemoryDb
 from agno.memory.v2.memory import Memory

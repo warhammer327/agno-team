@@ -1,10 +1,10 @@
-import os
 from agno.agent import Agent
 from agno.tools.sql import SQLTools
 from agno.models.openai import OpenAIChat
 from agno.knowledge.text import TextKnowledgeBase
 from agno.vectordb.search import SearchType
 from agno.vectordb.weaviate import Distance, VectorIndex, Weaviate
+from schemas.sales_assistants.emailer_agent_response import EmailResponse
 from config import config
 
 print("Loading knowledge base...")
@@ -28,6 +28,7 @@ emailer_agent = Agent(
     name="ProductEmailerAgent",
     model=model,
     knowledge=knowledge_base,
+    response_model=EmailResponse,
     tools=[SQLTools(db_url=config.database_url)],
     stream_intermediate_steps=True,
     description="Fetches product information from vector database then drafts a promotional email.",
@@ -47,13 +48,27 @@ emailer_agent = Agent(
             - Step 1: Search the vector database (knowledge base) for detailed information about the given product.
             - Step 2: Query the relational SQL database to retrieve the recipient’s details from the 'persons' table.
             - Step 3: If available, also identify the recipient’s organization from the 'organizations' table.
-            - Step 4: Draft a promotional email that:
-                • Has a relevant subject section
-                • Has a relevant body section
-                • Take into account person's details
-                • Greets the recipient by name.
-                • Highlights key product features and benefits.
-                • Tailors the message to the recipient's profile or organization if relevant.
-                • Maintains a concise, persuasive, and friendly tone.
+            - Step 4: Analyze information from 'persons' table and 'organizations' table, take these information into account when drafting email.
+            - Step 5: Draft a promotional email in this exact format:
+
+              {
+                "subject": "Compelling subject line",
+                "body": "Full email with greeting, product benefits, and call-to-action",
+                "recipient_name": "Person's name",
+                "product_name": "Product name", 
+                "organization_name": "Company name or null",
+                "success": true
+              }
+
+              if product name or recipient name is missing, return:
+              {
+                "subject": "",
+                "body": "",
+                "recipient_name": "",
+                "product_name": "",
+                "organization_name": null,
+                "success": false,
+                "error_message": "Could not find person/product information"
+              }
     """,
 )

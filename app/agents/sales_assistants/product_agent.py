@@ -1,30 +1,41 @@
-import os
+import weaviate
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 from agno.knowledge.text import TextKnowledgeBase
 from agno.vectordb.search import SearchType
 from agno.vectordb.weaviate import Distance, VectorIndex, Weaviate
+from schemas.sales_assistants.product_agent_response import ProductAgentResponse
 from config import config
+
+
+client = weaviate.connect_to_custom(
+    http_host="10.10.10.80",
+    http_port=8080,
+    http_secure=False,  # Set to True if using HTTPS
+    grpc_host="10.10.10.80",
+    grpc_port=50051,  # Default gRPC port
+    grpc_secure=False,  # Set to True if using secure gRPC
+)
 
 
 model = OpenAIChat(id="gpt-4o", api_key=config.OPENAI_API_KEY)
 
 vector_db = Weaviate(
-    collection="ProductDocuments",
+    collection="Business_data_collection",
     search_type=SearchType.hybrid,
     vector_index=VectorIndex.HNSW,
     distance=Distance.COSINE,
-    local=True,  # Set to False if using Weaviate Cloud and True if using local instance
+    local=False,  # Set to False if using Weaviate Cloud and True if using local instance
+    client=client,
 )
 knowledge_base = TextKnowledgeBase(vector_db=vector_db)
-
 product_agent = Agent(
     name="CriteriaDetailsAgent",
     model=model,
     knowledge=knowledge_base,
+    response_model=ProductAgentResponse,
     stream_intermediate_steps=True,
     description="Receives input criteria from the user, gathers matching information, and delivers complete details in the response.",
-    # SYSTEM MESSAGE → sets identity and global style
     system_message="""
         You are an intelligent information retrieval assistant.
         Your role is to receive search or filter criteria from the user, locate all relevant data
@@ -33,7 +44,6 @@ product_agent = Agent(
         Maintain a neutral, professional, and concise tone.
         If some details are unavailable, clearly state so instead of guessing.
     """,
-    # INSTRUCTIONS → step-by-step guidance for handling requests
     instructions="""
         Your task is to process each user query that contains search or filter criteria.
 
