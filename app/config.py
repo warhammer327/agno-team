@@ -1,8 +1,11 @@
+import weaviate
 from functools import lru_cache
 from typing import ClassVar
 from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from app.common.constants import HeaderType
+from weaviate.client import WeaviateClient
 
 
 class Configs(BaseSettings):
@@ -42,6 +45,19 @@ class Configs(BaseSettings):
             f"postgresql://{self.DB_USERNAME}:{self.DB_PASSWORD}"
             f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         )
+
+    @property
+    def weaviate_client(self) -> WeaviateClient:
+        weaviate_client = weaviate.connect_to_custom(
+            http_host=config.WEAVIATE_HTTP_HOST,
+            http_port=config.WEAVIATE_HTTP_PORT,
+            http_secure=False,
+            grpc_host=config.WEAVIATE_GRPC_HOST,
+            grpc_port=config.WEAVIATE_GRPC_PORT,
+            grpc_secure=False,
+            headers={HeaderType.X_OPEN_API_KEY: config.OPENAI_API_KEY},
+        )
+        return weaviate_client
 
 
 @lru_cache
