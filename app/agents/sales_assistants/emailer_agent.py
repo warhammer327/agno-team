@@ -1,34 +1,18 @@
 from agno.agent import Agent
 from agno.tools.sql import SQLTools
-from agno.models.openai import OpenAIChat
-from agno.knowledge.text import TextKnowledgeBase
-from agno.vectordb.search import SearchType
-from agno.vectordb.weaviate import Distance, VectorIndex, Weaviate
-from schemas.sales_assistants.emailer_agent_response import EmailResponse
-from config import config
-
-print("Loading knowledge base...")
+from app.common.llm_models import get_gpt4o_mini_model
+from app.common.vector_database import create_knowledge_base
+from app.config import config
 
 
-# Use cheaper model with lower rate limits
-model = OpenAIChat(id="gpt-4o-mini", api_key=config.OPENAI_API_KEY)
+model = get_gpt4o_mini_model()
 
-
-vector_db = Weaviate(
-    collection="ProductDocuments",
-    search_type=SearchType.hybrid,
-    vector_index=VectorIndex.HNSW,
-    distance=Distance.COSINE,
-    local=True,
-)
-
-knowledge_base = TextKnowledgeBase(vector_db=vector_db)
+knowledge_base = create_knowledge_base("Product_collection")
 
 emailer_agent = Agent(
     name="ProductEmailerAgent",
     model=model,
     knowledge=knowledge_base,
-    response_model=EmailResponse,
     tools=[SQLTools(db_url=config.database_url)],
     stream_intermediate_steps=True,
     description="Fetches product information from vector database then drafts a promotional email.",

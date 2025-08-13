@@ -1,21 +1,19 @@
 from agno.agent import Agent
 from agno.tools.sql import SQLTools
-from agno.models.openai import OpenAIChat
-from schemas.sales_assistants.sql_agent_response import SQLAgentResponse
-from config import config
+from app.common.llm_models import get_gpt4o_mini_model
+from app.config import config
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-model = OpenAIChat(id="gpt-4o-mini", api_key=config.OPENAI_API_KEY, temperature=0.1)
+model = get_gpt4o_mini_model()
 
 
 sql_agent = Agent(
     name="SQLAgent",
     model=model,
     tools=[SQLTools(db_url=config.database_url)],
-    response_model=SQLAgentResponse,
     description="Queries sevensix_dev database for customer and organization data",
     instructions="""
     Your task is to respond to short user inputs that are either:

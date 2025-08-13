@@ -3,7 +3,7 @@ from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 from agno.vectordb.search import SearchType
 from agno.vectordb.weaviate import Distance, VectorIndex, Weaviate
-from agno.knowledge.text import TextKnowledgeBase
+from agno.agent import AgentKnowledge
 from config import config
 from dotenv import load_dotenv
 
@@ -19,7 +19,7 @@ weaviate_client = weaviate.connect_to_custom(
 )
 
 vector_db = Weaviate(
-    collection="Business_data_collection",
+    collection="",
     search_type=SearchType.hybrid,
     vector_index=VectorIndex.HNSW,
     distance=Distance.COSINE,
@@ -27,7 +27,7 @@ vector_db = Weaviate(
     client=weaviate_client,
 )
 
-knowledge_base = TextKnowledgeBase(vector_db=vector_db)
+knowledge_base = AgentKnowledge(vector_db=vector_db)
 
 model = OpenAIChat(id="gpt-4o-mini", api_key=config.OPENAI_API_KEY, temperature=0.1)
 

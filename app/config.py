@@ -23,9 +23,18 @@ class Configs(BaseSettings):
     OPENAI_API_KEY: str = Field(..., json_schema_extra={"env": "OPENAI_API_KEY"})
     TAVILY_API_KEY: str = Field(..., json_schema_extra={"env": "TAVILY_API_KEY"})
 
-    TAVILY_API_KEY: str = Field(..., json_schema_extra={"env": "TAVILY_API_KEY"})
-
-    WEAVIATE_URL: str = Field(..., json_schema_extra={"env": "WEAVIATE_URL"})
+    WEAVIATE_HTTP_HOST: str = Field(
+        ..., json_schema_extra={"env": "WEAVIATE_HTTP_HOST"}
+    )
+    WEAVIATE_HTTP_PORT: int = Field(
+        ..., json_schema_extra={"env": "WEAVIATE_HTTP_PORT"}
+    )
+    WEAVIATE_GRPC_HOST: str = Field(
+        ..., json_schema_extra={"env": "WEAVIATE_GRPC_HOST"}
+    )
+    WEAVIATE_GRPC_PORT: int = Field(
+        ..., json_schema_extra={"env": "WEAVIATE_GRPC_PORT"}
+    )
 
     @property
     def database_url(self) -> str:
@@ -33,10 +42,6 @@ class Configs(BaseSettings):
             f"postgresql://{self.DB_USERNAME}:{self.DB_PASSWORD}"
             f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         )
-
-    @property
-    def weaviate_url(self) -> str:
-        return f"{self.WEAVIATE_URL}"
 
 
 @lru_cache

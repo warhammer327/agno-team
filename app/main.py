@@ -1,6 +1,6 @@
 import sys
 import os
-from agents.sales_assistants.orchestrator_agent import orchestrator_agent
+from app.agents.sales_assistants.orchestrator_agent import orchestrator_agent
 
 
 def print_banner():

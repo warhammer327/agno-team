@@ -1,15 +1,15 @@
 from agno.team.team import Team
-from agents.sales_assistants.sql_agent import sql_agent
-from agents.sales_assistants.emailer_agent import emailer_agent
-from agents.sales_assistants.product_agent import product_agent
+from app.agents.sales_assistants.sql_agent import sql_agent
+from app.agents.sales_assistants.emailer_agent import emailer_agent
+from app.agents.sales_assistants.product_agent import product_agent
 from agno.storage.postgres import PostgresStorage
 from agno.memory.v2.db.postgres import PostgresMemoryDb
 from agno.memory.v2.memory import Memory
 from agno.tools.reasoning import ReasoningTools
-from agno.models.openai import OpenAIChat
-from config import config
+from app.common.llm_models import get_gpt4o_model
+from app.config import config
 
-model = OpenAIChat(id="gpt-4o", temperature=0.1, api_key=config.OPENAI_API_KEY)
+model = get_gpt4o_model()
 
 memory_db = PostgresMemoryDb(table_name="team_memories", db_url=config.database_url)
 memory = Memory(model=model, db=memory_db)
@@ -27,6 +27,8 @@ orchestrator_agent = Team(
     add_history_to_messages=True,
     num_history_runs=5,
     read_team_history=True,
+    show_tool_calls=True,
+    debug_mode=True,
     members=[sql_agent, product_agent, emailer_agent],
     model=model,
     tools=[ReasoningTools(add_instructions=True)],
