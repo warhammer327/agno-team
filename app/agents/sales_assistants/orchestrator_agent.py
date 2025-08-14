@@ -7,6 +7,7 @@ from agno.memory.v2.db.postgres import PostgresMemoryDb
 from agno.memory.v2.memory import Memory
 from agno.tools.reasoning import ReasoningTools
 from app.common.llm_models import get_gpt4o_model
+from app.schemas.agents.sales_assistants.agent_response import OrchestratorResponse
 from app.config import config
 
 
@@ -29,54 +30,54 @@ INSTRUCTIONS = """
 
         DELEGATION RULES:
 
-        🏢 For Organization/Person Information (like "福沢 博志"):
+            For Organization/Person Information (like "福沢 博志"):
             - ALWAYS use sql-agent for any person or company lookup
             - Use for: company overview, person details, business activities, history
             - Keywords: "overview of", "tell me about", "information about", person names, company names
 
-        🛍️ For Product Information:
+            For Product Information:
             - Use product-agent ONLY for product/technology searches
             - Keywords: "product", "solution", "recommendation", "technical specs"
 
-        ✉️ For Email Drafting:
+            For Email Drafting:
             - Use email-agent for email composition
             - Keywords: "draft email", "send email", "write to"
 
         IMPORTANT: When delegating, use exact agent IDs:
-        - transfer_task_to_member(member_id="sql-agent", ...)
-        - transfer_task_to_member(member_id="product-agent", ...)
-        - transfer_task_to_member(member_id="email-agent", ...)
+            - transfer_task_to_member(member_id="sql-agent", ...)
+            - transfer_task_to_member(member_id="product-agent", ...)
+            - transfer_task_to_member(member_id="email-agent", ...)
 
         CRITICAL RESPONSE FORMATTING RULES:
 
-        📋 For Product Agent Results:
+        For Product Agent Results:
         When the product-agent returns product information, you MUST present ALL the following fields if available:
-        - Product Name (with source company if provided)
-        - Complete product description and content
-        - ALL Key Features (list every feature provided)
-        - ALL Technical Specifications (include every spec detail)
-        - ALL Applications/Use Cases (list every application mentioned)
-        - Source URL (as clickable link)
-        - Image URLs (display images if provided)
-        - YouTube URLs (include video links if provided)
-        - Relevance score (if provided)
-        - Search query used
-        - Total results found
+            - Product Name (with source company if provided)
+            - Complete product description and content
+            - ALL Key Features (list every feature provided)
+            - ALL Technical Specifications (include every spec detail)
+            - ALL Applications/Use Cases (list every application mentioned)
+            - Source URL (as clickable link)
+            - Image URLs (display images if provided)
+            - YouTube URLs (include video links if provided)
+            - Relevance score (if provided)
+            - Search query used
+            - Total results found
 
         📋 For SQL Agent Results:
         When the sql-agent returns person/organization data, you MUST present ALL the following fields if available:
-        - Person Data: name, title, career history, current activities, publications, organization name
-        - Organization Data: name, overview, business activities, history, group companies, business partners, sales trends, president message, interview articles, past transactions
-        - Query used for transparency
+            - Person Data: name, title, career history, current activities, publications, organization name
+            - Organization Data: name, overview, business activities, history, group companies, business partners, sales trends, president message, interview articles, past transactions
+            - Query used for transparency
 
-        📋 General Formatting Requirements:
-        - Use proper markdown formatting with headers, bullet points, and emphasis
-        - Include ALL technical specifications in organized sections
-        - Display images and links when provided
-        - Never truncate or summarize detailed technical information
-        - Present information in a structured, easy-to-read format
-        - Include exact measurements, ranges, and technical parameters
-        - Show channel counts, dimensions, temperature ranges, etc. in full detail
+        General Formatting Requirements:
+            - Use proper markdown formatting with headers, bullet points, and emphasis
+            - Include ALL technical specifications in organized sections
+            - Display images and links when provided
+            - Never truncate or summarize detailed technical information
+            - Present information in a structured, easy-to-read format
+            - Include exact measurements, ranges, and technical parameters
+            - Show channel counts, dimensions, temperature ranges, etc. in full detail
 
         For person/organization queries, ALWAYS delegate to sql-agent first.
         For product queries, ALWAYS delegate to product-agent and present COMPLETE results.
@@ -109,6 +110,7 @@ orchestrator_agent = Team(
     storage=storage,
     user_id="16",
     session_id="16",
+    response_model=OrchestratorResponse,
     enable_agentic_memory=True,
     enable_user_memories=True,
     add_history_to_messages=True,

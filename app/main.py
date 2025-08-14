@@ -71,10 +71,10 @@ def main():
                 print("\n🤖 Assistant: ", end="", flush=True)
 
                 # Get response from orchestrator
-                response = orchestrator_agent.print_response(user_input)
+                response = orchestrator_agent.run(user_input)
 
                 # Print the response
-                print(response)
+                print(response.content)
 
             except KeyboardInterrupt:
                 print("\n\n👋 Conversation interrupted. Goodbye!")
