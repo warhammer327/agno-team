@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional
 
-from app.schemas.sales_assistants.domain_models import (
+from app.schemas.agents.sales_assistants.domain_models import (
     PersonData,
     OrganizationData,
     ProductInfo,
