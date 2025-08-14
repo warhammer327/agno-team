@@ -25,7 +25,7 @@ def get_weaviate_client():
             grpc_host=config.WEAVIATE_GRPC_HOST,
             grpc_port=config.WEAVIATE_GRPC_PORT,
             grpc_secure=False,
-            headers={HeaderType.X_OPEN_API_KEY: config.OPENAI_API_KEY},
+            headers={HeaderType.X_OPEN_API_KEY.value: config.OPENAI_API_KEY},
         )
 
 

@@ -34,6 +34,7 @@ def clear_screen():
 
 def main():
     """Main conversational loop."""
+
     try:
         # Initialize the orchestrator agent
         print("🚀 Initializing Sales Assistant...")
