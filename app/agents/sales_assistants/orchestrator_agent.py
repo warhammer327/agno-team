@@ -5,85 +5,79 @@ from app.agents.sales_assistants.product_agent import product_agent
 from agno.storage.postgres import PostgresStorage
 from agno.memory.v2.db.postgres import PostgresMemoryDb
 from agno.memory.v2.memory import Memory
-from agno.tools.reasoning import ReasoningTools
-from app.common.llm_models import get_gpt4o_model
+from app.common.llm_models import get_gpt4o_mini_model
+from app.schemas.agents.sales_assistants.agent_response import OrchestratorResponse
 from app.config import config
 
-model = get_gpt4o_model()
 
-memory_db = PostgresMemoryDb(table_name="team_memories", db_url=config.database_url)
-memory = Memory(model=model, db=memory_db)
-storage = PostgresStorage(table_name="team_sessions", db_url=config.database_url)
+SYSTEM_MESSAGE = """
+You are the OrchestratorAgent coordinating three specialized agents. Your role is to understand user requests and delegate to the appropriate agent(s) based on the task.
+# AVAILABLE AGENTS:
+1. sql-agent
+   - Task: Research organization or person information from database
+   - Trigger: If the user explicitly asks for information about a company, organization, or individual.
 
-orchestrator_agent = Team(
-    name="OrchestratorAgent",
-    mode="coordinate",
-    memory=memory,
-    storage=storage,
-    user_id="1",
-    session_id="1",
-    enable_agentic_memory=True,
-    enable_user_memories=True,
-    add_history_to_messages=True,
-    num_history_runs=5,
-    read_team_history=True,
-    show_tool_calls=True,
-    debug_mode=True,
-    members=[sql_agent, product_agent, emailer_agent],
-    model=model,
-    tools=[ReasoningTools(add_instructions=True)],
-    instructions=[
-        """
-            You are the OrchestratorAgent coordinating three specialized agents. Your role is to understand user requests and delegate to the appropriate agent(s) based on the task.
+2. product-agent
+   - Task: Search and recommend products
+   - Trigger: If the user asks for product search, comparison, recommendation, or details about a product.
 
-            AVAILABLE AGENTS:
-            1. SQLAgent - For researching organization and person information from database
-            2. ProductManagerAgent - For product search and recommendations  
-            3. EmailAgent - For drafting emails
+3. email-agent
+   - Task: Draft emails
+   - Trigger: If the user asks to compose an email or message for their team.
+ """
 
-            DELEGATION RULES:
-            
-            🔍 For Organization/Person Information:
-            - When users ask about companies, organizations, or people
-            - Use SQLAgent to search database for: company overview, business activities, history, group companies, major business partners, sales trends, president messages, interview articles, past transactions
-            - For persons: research organization, title, career history, current activities, publications
+INSTRUCTIONS = """
+# STEPWISE INSTRUCTIONS:
+1. Read the user's request carefully.
+2. Determine **exactly which agent is required**.
+   - Only select one agent unless the request explicitly requires multiple tasks.
+3. If uncertain, ask the user for clarification instead of executing multiple agents.
+4. Delegate the task to the chosen agent with all necessary context.
+5. Wait for the agent’s response and return it to the user.
+ """
 
-            🛍️ For Product Information:
-            - When users ask about products, solutions, or need product recommendations
-            - Use ProductManagerAgent to search for matching products
-            - If multiple products match, ask follow-up questions to narrow search
+SUCCESS_CRITERIA = """
+    SUCCESS CRITERIA - The task is successful when:
+        1. Correct agent IDs are used in delegation (sql-agent, product-agent, email-agent)
+        2. sql-agent is used for ALL person/organization queries
+        3. product-agent is used ONLY for product searches
+        4. email-agent is used for email composition
+        6. ALL detailed information from specialized agents is presented completely without truncation
+ """
 
-            ✉️ For Email Drafting:
-            - When users request email drafts, proposals, or outreach messages
-            - Use EmailAgent to draft subject and body
-            - Include organization/person challenges and product benefits
-            - Requires: [product name] and [organization name/person name]
 
-            WORKFLOW EXAMPLES:
-            1. "Tell me about Company X" → Use SQLAgent
-            2. "What products do you have for data analysis?" → Use ProductManagerAgent  
-            3. "Draft an email to Company Y about Product Z" → Use EmailAgent
-            4. "Find info about John Smith, then recommend products, then draft email" → Use SQLAgent → ProductManagerAgent → EmailAgent
+def create_orchestrator_team():
+    """Factory function to create orchestrator team configuration"""
+    model = get_gpt4o_mini_model()
+    memory_db = PostgresMemoryDb(table_name="team_memories", db_url=config.database_url)
+    memory = Memory(model=model, db=memory_db)
+    storage = PostgresStorage(table_name="team_sessions", db_url=config.database_url)
 
-            MEMORY USAGE:
-            - Remember previous searches and context within the conversation
-            - Build upon information gathered from previous agent interactions
-            - Use conversation history to provide better recommendations
+    return Team(
+        name="orchestrator_agent",
+        mode="coordinate",
+        memory=memory,
+        storage=storage,
+        members=[sql_agent, product_agent, emailer_agent],
+        model=model,
+        user_id="default",  # Will be updated dynamically
+        session_id="default",  # Will be updated dynamically
+        response_model=OrchestratorResponse,
+        enable_agentic_memory=True,  # agent itself manage memories
+        enable_user_memories=False,  # At the end of a run, the agent creates/updates user-specific memories
+        add_history_to_messages=True,  # Includes chat history messages in the context sent to the model
+        num_history_runs=3,  # How many past interactions to include when add_history_to_messages=True
+        read_team_history=False,  # Loads previous team runs’ history from storage and makes it available for reasoning
+        enable_agentic_context=True,  # Allows the team agent to update shared context and automatically push it to members
+        show_tool_calls=False,
+        debug_mode=False,
+        system_message=SYSTEM_MESSAGE,
+        instructions=INSTRUCTIONS,
+        markdown=True,
+        add_datetime_to_instructions=False,
+        monitoring=True,
+    )
 
-            Always explain which agent you're using and why.
-            """
-    ],
-    markdown=True,
-    show_members_responses=False,
-    enable_agentic_context=True,
-    add_datetime_to_instructions=True,
-    success_criteria="""
-            SUCCESS CRITERIA - The task is successful when:
-                1. User queries are correctly routed to appropriate agents
-                2. SQLAgent is used for organization/person information 
-                3. ProductManagerAgent is used for product searches
-                4. EmailAgent is used for email drafting
-                5. Memory is utilized to maintain context across interactions
-                6. Multiple agents are coordinated when complex tasks require it
-        """,
-)
+
+# Create the orchestrator instance
+orchestrator_agent = create_orchestrator_team()

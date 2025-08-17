@@ -3,6 +3,7 @@ from agno.vectordb.weaviate import Weaviate, Distance, VectorIndex
 from agno.vectordb.search import SearchType
 from agno.agent import AgentKnowledge
 from app.config import config
+from app.common.constants import HeaderType
 from agno.embedder.openai import OpenAIEmbedder
 
 embedder = OpenAIEmbedder(
@@ -24,6 +25,7 @@ def get_weaviate_client():
             grpc_host=config.WEAVIATE_GRPC_HOST,
             grpc_port=config.WEAVIATE_GRPC_PORT,
             grpc_secure=False,
+            headers={HeaderType.X_OPEN_API_KEY.value: config.OPENAI_API_KEY},
         )
 
 
