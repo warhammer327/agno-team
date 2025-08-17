@@ -9,7 +9,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 query_router = APIRouter()
-_orchecstrator_lock = asyncio.Lock()
 
 
 @query_router.post("/query", response_model=QueryResponse)
@@ -20,10 +19,9 @@ async def process_query(request: QueryRequest):
         raise HTTPException(status_code=503, detail="Sales Assistant not initialized")
 
     try:
-        async with _orchecstrator_lock:
-            orchestrator_agent.user_id = request.user_id
-            orchestrator_agent.session_id = request.session_id
-            team_response = orchestrator_agent.run(request.query)
+        team_response = orchestrator_agent.run(
+            request.query, user_id=request.user_id, session_id=request.session_id
+        )
 
         # Extract the actual orchestrator response from the team response
         # The team response should contain your OrchestratorResponse in the content
