@@ -1,5 +1,5 @@
 from agno.agent import Agent, RunResponse
-from app.common.llm_models import get_gpt4o_model
+from app.common.llm_models import get_gpt4o_mini_model, get_gpt4o_model
 from app.agents.sales_assistants.custom_tools.search import search_knowledge_base
 from app.schemas.agents.sales_assistants.agent_response import ProductAgentResponse
 
@@ -32,7 +32,7 @@ INSTRUCTIONS = """
     The search function will return formatted results - present them clearly to help the user.
 """
 # Create the model
-model = get_gpt4o_model()
+model = get_gpt4o_mini_model()
 
 # Create agent with the function as a tool
 product_agent = Agent(
@@ -45,4 +45,5 @@ product_agent = Agent(
     description=DESCRIPTION,
     system_message=SYSTEM_MESSAGE,
     instructions=INSTRUCTIONS,
+    monitoring=False,
 )

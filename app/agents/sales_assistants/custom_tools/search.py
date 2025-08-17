@@ -12,7 +12,7 @@ def search_knowledge_base(query: str) -> str:
 
     client = config.weaviate_client
     try:
-        collection = client.collections.get("Product_collection")
+        collection = client.collections.get("Product_collection_demo")
         # Perform semantic search
         response = collection.query.near_text(
             query=query,

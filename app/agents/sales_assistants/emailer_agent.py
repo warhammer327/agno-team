@@ -13,8 +13,7 @@ SYSTEM_MESSAGE = """
     You are a professional marketing assistant specializing in crafting persuasive, engaging, and
     friendly promotional emails. Your tone is warm, approachable, and subtly persuasive while
     remaining factual and accurate. Always highlight unique product features and benefits in a way
-    that resonates with the recipient’s needs. Avoid technical jargon unless the audience is technical.
-
+    that resonates with the recipient’s needs.
 """
 
 INSTRUCTIONS = """
@@ -43,4 +42,5 @@ emailer_agent = Agent(
     description=DESCRIPTION,
     system_message=SYSTEM_MESSAGE,
     instructions=INSTRUCTIONS,
+    monitoring=True,
 )
