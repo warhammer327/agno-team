@@ -39,6 +39,8 @@ class Configs(BaseSettings):
         ..., json_schema_extra={"env": "WEAVIATE_GRPC_PORT"}
     )
 
+    AGNO_API_KEY: str = Field(..., json_schema_extra={"env": "AGNO_API_KEY"})
+
     @property
     def database_url(self) -> str:
         return (

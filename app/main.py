@@ -1,96 +1,55 @@
-import sys
-import os
-from app.agents.sales_assistants.orchestrator_agent import orchestrator_agent
+import logging
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from app.routes.query import query_router
+from app.dependencies import initialize_orchestrator
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-def print_banner():
-    """Print a welcome banner."""
-    print("=" * 60)
-    print("🤖 Sales Assistant - Terminal Interface")
-    print("=" * 60)
-    print("Type 'quit', 'exit', or 'bye' to end the conversation")
-    print("Type 'help' for available commands")
-    print("-" * 60)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        logger.info("initializing....")
+        initialize_orchestrator()
+        yield
+    except Exception as e:
+        logger.error(f"❌ Failed to initialize Sales Assistant: {e}")
+        raise
+    finally:
+        logger.info("🔄 Shutting down Sales Assistant...")
 
 
-def print_help():
-    """Print help information."""
-    print("\n📋 Available commands:")
-    print("  help     - Show this help message")
-    print("  clear    - Clear the screen")
-    print("  quit     - Exit the application")
-    print("  exit     - Exit the application")
-    print("  bye      - Exit the application")
-    print("\n💬 Just type your questions or requests naturally!")
-    print("   Example: 'Find information about fiber optic products'")
-    print("   Example: 'Send an email about our latest MEMS switches'")
-    print("-" * 60)
+app = FastAPI(
+    title="SevenSix AI Assistant API",
+    description="AI-powered assistant",
+    version="1.0.0",
+    lifespan=lifespan,
+)
+
+app.include_router(query_router)
 
 
-def clear_screen():
-    """Clear the terminal screen."""
-    os.system("cls" if os.name == "nt" else "clear")
+@app.get("/")
+async def root():
+    """Health check endpoint"""
+    return {"message": "Sales Assistant API is running", "status": "healthy"}
 
 
-def main():
-    """Main conversational loop."""
+@app.get("/health")
+async def health():
+    """Detailed health check"""
+    from app.dependencies import get_orchestrator
 
     try:
-        # Initialize the orchestrator agent
-        print("🚀 Initializing Sales Assistant...")
-        print("✅ Sales Assistant ready!")
-
-        # Print welcome banner
-        print_banner()
-
-        # Main conversation loop
-        while True:
-            try:
-                # Get user input
-                user_input = input("\n👤 You: ").strip()
-
-                # Handle empty input
-                if not user_input:
-                    continue
-
-                # Handle special commands
-                if user_input.lower() in ["quit", "exit", "bye"]:
-                    print("\n👋 Thanks for using Sales Assistant! Goodbye!")
-                    break
-
-                elif user_input.lower() == "help":
-                    print_help()
-                    continue
-
-                elif user_input.lower() == "clear":
-                    clear_screen()
-                    print_banner()
-                    continue
-
-                # Process user input with orchestrator
-                print("\n🤖 Assistant: ", end="", flush=True)
-
-                # Get response from orchestrator
-                response = orchestrator_agent.run(user_input)
-
-                # Print the response
-                print(response.content)
-
-            except KeyboardInterrupt:
-                print("\n\n👋 Conversation interrupted. Goodbye!")
-                break
-
-            except Exception as e:
-                print(f"\n❌ Error processing request: {str(e)}")
-                print(
-                    "💡 Please try rephrasing your request or type 'help' for guidance."
-                )
-
+        orchestrator = get_orchestrator()
+        return {
+            "status": "healthy",
+            "orchestrator_ready": True,
+        }
     except Exception as e:
-        print(f"❌ Failed to initialize Sales Assistant: {str(e)}")
-        print("💡 Please check your configuration and try again.")
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
+        return {
+            "status": "unhealthy",
+            "orchestrator_ready": False,
+        }
