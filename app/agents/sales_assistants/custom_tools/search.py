@@ -1,4 +1,5 @@
 from app.config import config
+from app.utils.weaviate_utils import get_collection_by_security_level
 
 
 def search_knowledge_base(query: str) -> str:
@@ -16,7 +17,7 @@ def search_knowledge_base(query: str) -> str:
         # Perform semantic search
         response = collection.query.near_text(
             query=query,
-            limit=5,
+            limit=3,
             return_properties=["content", "source", "image_urls", "youtube_urls"],
             return_metadata=["score"],
         )

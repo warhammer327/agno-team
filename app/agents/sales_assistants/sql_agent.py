@@ -1,9 +1,11 @@
 from agno.agent import Agent
 from agno.tools.sql import SQLTools
+from agno.tools import Toolkit
 from app.common.llm_models import get_gpt4o_mini_model
 from app.schemas.agents.sales_assistants.agent_response import SQLAgentResponse
 from app.config import config
 from dotenv import load_dotenv
+from typing import List, Union, Any
 
 load_dotenv()
 
@@ -67,12 +69,35 @@ INSTRUCTIONS = """
 
 model = get_gpt4o_mini_model()
 
-sql_agent = Agent(
-    name="sql-agent",
-    model=model,
-    tools=[SQLTools(db_url=config.database_url)],
-    response_model=SQLAgentResponse,
-    description=DESCRIPTION,
-    system_message=SYSTEM_MESSAGE,
-    monitoring=True,
-)
+
+# If you know the expected type, be explicit:
+
+
+def create_sql_agent(level: str) -> Agent:
+    model = get_gpt4o_mini_model()
+
+    tools: List[Union[Toolkit, Any]] = []
+
+    if level == "xyz":
+        tools = [
+            SQLTools(db_url=config.database_url),
+            SQLTools(db_url=config.database_url1),
+        ]
+    else:
+        tools = [
+            SQLTools(db_url=config.database_url),
+        ]
+
+    return Agent(
+        name="sql-agent",
+        model=model,
+        tools=tools,
+        response_model=SQLAgentResponse,
+        description=DESCRIPTION,
+        system_message=SYSTEM_MESSAGE,
+        instructions=INSTRUCTIONS,
+        monitoring=True,
+    )
+
+
+sql_agent = create_sql_agent("hellow")
