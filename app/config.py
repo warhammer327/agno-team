@@ -49,13 +49,6 @@ class Configs(BaseSettings):
         )
 
     @property
-    def database_url1(self) -> str:
-        return (
-            f"postgresql://{self.DB_USERNAME}:{self.DB_PASSWORD}"
-            f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-        )
-
-    @property
     def weaviate_client(self) -> WeaviateClient:
         weaviate_client = weaviate.connect_to_custom(
             http_host=config.WEAVIATE_HTTP_HOST,
