@@ -1,5 +1,8 @@
 from agno.team.team import Team
-from app.agents.sales_assistants.sql_agent import sql_agent
+from agno.agent import Agent
+from app.agents.sales_assistants.sql_agent_level_one import sql_agent_level_one
+from app.agents.sales_assistants.sql_agent_level_two import sql_agent_level_two
+from app.agents.sales_assistants.sql_agent_level_three import sql_agent_level_three
 from app.agents.sales_assistants.emailer_agent import emailer_agent
 from app.agents.sales_assistants.product_agent import product_agent
 from agno.storage.postgres import PostgresStorage
@@ -7,6 +10,7 @@ from agno.memory.v2.db.postgres import PostgresMemoryDb
 from agno.memory.v2.memory import Memory
 from app.common.llm_models import get_gpt4o_mini_model
 from app.schemas.agents.sales_assistants.agent_response import OrchestratorResponse
+from typing import List, Union
 from app.config import config
 
 
@@ -46,19 +50,34 @@ SUCCESS_CRITERIA = """
  """
 
 
-def create_orchestrator_team():
+def create_orchestrator_team(level: List[str] = ["level_1"]):
     """Factory function to create orchestrator team configuration"""
     model = get_gpt4o_mini_model()
     memory_db = PostgresMemoryDb(table_name="team_memories", db_url=config.database_url)
     memory = Memory(model=model, db=memory_db)
     storage = PostgresStorage(table_name="team_sessions", db_url=config.database_url)
+    members: List[Union[Agent, Team]] = [product_agent, emailer_agent]
+
+    if "level_1" in level:
+        members.append(sql_agent_level_one)
+    if "level_2" in level:
+        members.append(sql_agent_level_two)
+    if "level_3" in level:
+        members.append(sql_agent_level_three)
+
+    # Validate that at least one valid level was provided
+    valid_levels = {"level_1", "level_2", "level_3"}
+    if not any(lvl in valid_levels for lvl in level):
+        raise ValueError(
+            f"Invalid level(s): {level}. Must contain at least one of: 'level_1', 'level_2', or 'level_3'."
+        )
 
     return Team(
         name="orchestrator_agent",
         mode="coordinate",
         memory=memory,
         storage=storage,
-        members=[sql_agent, product_agent, emailer_agent],
+        members=members,
         model=model,
         user_id="default",  # Will be updated dynamically
         session_id="default",  # Will be updated dynamically
@@ -80,4 +99,4 @@ def create_orchestrator_team():
 
 
 # Create the orchestrator instance
-orchestrator_agent = create_orchestrator_team()
+orchestrator_agent = create_orchestrator_team(["level_1"])
