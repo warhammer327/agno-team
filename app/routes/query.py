@@ -1,5 +1,4 @@
 import logging
-import asyncio
 from fastapi import APIRouter, HTTPException
 from app.schemas.requests.query import QueryRequest, QueryResponse
 from app.dependencies import get_orchestrator
@@ -23,14 +22,8 @@ async def process_query(request: QueryRequest):
             request.query, user_id=request.user_id, session_id=request.session_id
         )
 
-        # Extract the actual orchestrator response from the team response
-        # The team response should contain your OrchestratorResponse in the content
         if hasattr(team_response, "content") and team_response.content:
-            # If content is your OrchestratorResponse object
             orchestrator_response = team_response.content
-            print("=" * 50)
-            print(orchestrator_response)
-            print("=" * 50)
 
             return QueryResponse(
                 success=True,
