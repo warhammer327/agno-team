@@ -31,7 +31,7 @@ async def process_query(request: QueryRequest):
                 user_id=request.user_id,
                 session_id=request.session_id,
                 error=None,
-                orchestrator_response=orchestrator_response,
+                orchestrator_response=None,
             )
         else:
             # Fallback: use the team response message as content
